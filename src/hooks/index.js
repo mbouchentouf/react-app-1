@@ -34,8 +34,42 @@ export const useTasks = selectedProject => {
 
             setTasks(
                 selectedProject === 'NEXT_7'
+                ? newTasks.filter(
+                    task =>
+                        moment(task.date, 'DD/MM/YYYY').diff(moment(), 'days') <= 7 &&
+                        task.archived !==true
+                    )
+                : newTasks.filter(task.archived !== true)
+            );
+        });
 
-            )
-        })
-        },[selectedProject]);
+        return () => unsubscribe();
+    },[selectedProject]);
+
+    return {tasks, archivedTasks};
+};
+
+export const useProjects = () => {
+    const [projects, setProjects] => useState([]);
+
+    useEffect(() => {
+        firebase
+            .firestore()
+            .collection('projects')
+            .where('userId', '==', '5MDfbb99qpE');
+            .orderBy('projectId')
+            .getScopes()
+            .then(snapshot => {
+                const allProjects = snapshot.doc.map(project=> ({
+                    ...project.data(),
+                    docId: project.id,
+                }));
+
+                if (JSON.stringify(allProjects) !== JSON.stringify(projects)) {
+                    setProjects(allProjects);
+                }
+            });
+    }, [projects]);
+
+    return {projects, setProjects};
 };
