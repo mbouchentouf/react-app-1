@@ -1,10 +1,10 @@
 import React from "react";
-import {Checkbox} from './Checkbox';
+import {Checkbox} from "./Checkbox";
 
 export const Tasks = () => {
     const tasks = [];
 
-    let projectName = '';
+    const projectName = '';
 
     return (
         <div className="tasks" data-testid="tasks">
